@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#102a43">
+    <title>ETIFT | People operations, made human</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="landing-page">
+    <header class="landing-nav">
+        <a class="nav-brand" href="/">
+            <img src="assets/etift-logo.png" alt="ETIFT logo" class="nav-logo">
+            <span>ETIFT <small>People Operations</small></span>
+        </a>
+        <button class="btn-outline-light" type="button" onclick="showLogin()">Sign in</button>
+    </header>
+
+    <main class="landing-main">
+        <section class="landing-copy">
+            <p class="eyebrow">ETHIOPIAN INCLUSIVE FINANCE TECHNOLOGY</p>
+            <h1>Make every workday <em>count.</em></h1>
+            <p class="landing-lede">A trusted workspace for attendance, teams, schedules, and the people who make ETIFT move.</p>
+            <div class="landing-actions">
+                <button class="btn-primary btn-compact" type="button" onclick="showLogin()">Access your workspace</button>
+                <span class="security-note">Secure role-based access · Local time tracking</span>
+            </div>
+        </section>
+        <section class="landing-visual" aria-label="ETIFT workforce platform">
+            <div class="visual-card visual-main">
+                <div class="visual-top"><span class="live-dot"></span> Workforce overview <strong>Today</strong></div>
+                <div class="visual-metric"><span>Team attendance</span><b>92%</b></div>
+                <div class="visual-progress"><i></i></div>
+                <div class="visual-grid"><span><b>08:30</b><small>Average check-in</small></span><span><b>08h 00m</b><small>Target workday</small></span></div>
+            </div>
+            <div class="visual-card visual-float"><img src="assets/etift-logo.png" alt=""><span>One portal.<br><b>Every team.</b></span></div>
+        </section>
+    </main>
+
+    <section id="loginPanel" class="login-panel" hidden>
+        <div class="login-box">
+            <button class="login-close" type="button" onclick="hideLogin()" aria-label="Close sign in">×</button>
+            <div class="logo-section">
+                <div class="brand-mark"><img src="assets/etift-logo.png" alt="ETIFT logo" class="brand-logo"></div>
+                <h1>Welcome back</h1>
+                <p>Sign in to your ETIFT workspace</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group"><label for="email">Work email</label><input type="email" id="email" placeholder="name@etift.com" autocomplete="email" required></div>
+                <div class="form-group"><label for="password">Password</label><input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required></div>
+                <button type="submit" class="btn-primary">Sign in securely</button>
+                <div id="loginError" class="error-message" role="alert"></div>
+            </form>
+            <div class="login-footer"><p>ETIFT · People operations platform</p></div>
+        </div>
+    </section>
+    <script src="script.js"></script>
+    <script>
+        function showLogin() { document.getElementById('loginPanel').hidden = false; document.getElementById('email').focus(); }
+        function hideLogin() { document.getElementById('loginPanel').hidden = true; }
+    </script>
+</body>
+</html>

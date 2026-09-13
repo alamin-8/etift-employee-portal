@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETIFT Quick Attendance</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .quick-attendance-box {
+            width: min(420px, 90vw);
+            background: white;
+            border-radius: 16px;
+            padding: 32px 24px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+        }
+
+        .quick-attendance-box h1 {
+            text-align: center;
+            color: #1a237e;
+            margin-bottom: 8px;
+        }
+
+        .quick-attendance-box p {
+            text-align: center;
+            color: #555;
+            margin-bottom: 24px;
+        }
+
+        .quick-status {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: none;
+        }
+
+        .quick-status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .quick-attendance-box form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .quick-attendance-box button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            background: #1a237e;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="quick-attendance-box">
+        <h1 id="quickTitle">ETIFT Attendance</h1>
+        <p id="quickSubtitle">Scan with your phone to mark attendance for today.</p>
+        <div id="quickStatus" class="quick-status"></div>
+
+        <form id="quickAttendanceForm">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="quickEmail" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="quickPassword" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" id="quickSubmitButton">Mark Attendance</button>
+        </form>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const mode = params.get('mode') === 'checkout' ? 'checkout' : 'checkin';
+        const qrToken = params.get('token') || '';
+        const quickTitle = document.getElementById('quickTitle');
+        const quickSubtitle = document.getElementById('quickSubtitle');
+        const quickStatus = document.getElementById('quickStatus');
+        const quickSubmitButton = document.getElementById('quickSubmitButton');
+
+        quickTitle.textContent = mode === 'checkin' ? 'Check In' : 'Check Out';
+        quickSubtitle.textContent = mode === 'checkin'
+            ? 'Use your ETIFT account to check in for today.'
+            : 'Use your ETIFT account to check out for today.';
+
+        function showStatus(message, isError = false) {
+            quickStatus.textContent = message;
+            quickStatus.style.display = 'block';
+            quickStatus.classList.toggle('error', isError);
+        }
+
+        async function markAttendance() {
+            const endpoint = mode === 'checkin' ? '/api/attendance/checkin' : '/api/attendance/checkout';
+            quickSubmitButton.disabled = true;
+            quickSubmitButton.textContent = mode === 'checkin' ? 'Checking In...' : 'Checking Out...';
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: qrToken })
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.message || 'Unable to mark attendance.');
+                }
+                showStatus(mode === 'checkin' ? `Checked in successfully at ${data.time}.` : `Checked out successfully at ${data.time}.`);
+                quickSubmitButton.textContent = 'Completed';
+            } catch (error) {
+                showStatus(error.message || 'Unable to complete attendance action.', true);
+                quickSubmitButton.disabled = false;
+                quickSubmitButton.textContent = mode === 'checkin' ? 'Mark Attendance' : 'Check Out';
+            }
+        }
+
+        document.getElementById('quickAttendanceForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('quickEmail').value.trim();
+            const password = document.getElementById('quickPassword').value;
+
+            try {
+                const loginResponse = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                    credentials: 'same-origin'
+                });
+                const loginData = await loginResponse.json();
+                if (!loginResponse.ok) {
+                    throw new Error(loginData.message || 'Login failed.');
+                }
+
+                showStatus(mode === 'checkin' ? 'Login successful. Marking attendance...' : 'Login successful. Marking checkout...');
+                await markAttendance();
+            } catch (error) {
+                showStatus(error.message || 'Login failed. Please try again.', true);
+            }
+        });
+    </script>
+</body>
+</html>

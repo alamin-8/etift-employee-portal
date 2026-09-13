@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - ETIFT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="assets/etift-logo.png" alt="ETIFT logo" class="nav-logo">
+            <span>ETIFT Admin</span>
+        </div>
+        <div class="nav-links">
+            <span id="adminName">Admin</span>
+            <button onclick="logout()" class="btn-logout">Logout</button>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" data-page="employees">Employees</a></li>
+                <li><a href="#" data-page="leave-mgmt">Leave Management</a></li>
+                <li><a href="#" data-page="announce-mgmt">Announcements</a></li>
+                <li><a href="#" data-page="recruitment">Recruitment</a></li>
+                <li><a href="#" data-page="attendance-qr">Attendance QR</a></li>
+                <li><a href="/dashboard.html">User Dashboard</a></li>
+            </ul>
+        </aside>
+
+        <main class="main-content">
+            <div id="pageContent">
+                <!-- Employees Page -->
+                <div id="employeesPage">
+                    <div class="page-header">
+                        <h2>Employee Management</h2>
+                        <button onclick="showAddEmployee()" class="btn-primary">Add Employee</button>
+                    </div>
+                    <div id="employeeList" class="employee-table"></div>
+                    <div id="addEmployeeForm" style="display:none;" class="modal-form">
+                        <h3>Add New Employee</h3>
+                        <form id="employeeForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Employee ID</label>
+                                    <input type="text" id="empId" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" id="empName" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" id="empEmail" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" id="empPassword" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Department</label>
+                                    <input type="text" id="empDepartment">
+                                </div>
+                                <div class="form-group">
+                                    <label>Position</label>
+                                    <input type="text" id="empPosition">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Role</label>
+                                    <select id="empRole">
+                                        <option value="employee">Employee</option>
+                                        <option value="manager">Manager</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="text" id="empPhone">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Hire Date</label>
+                                <input type="date" id="empHireDate">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Save</button>
+                                <button type="button" onclick="hideAddEmployee()" class="btn-secondary">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Leave Management -->
+                <div id="leaveMgmtPage" style="display:none;">
+                    <h2>Leave Management</h2>
+                    <div id="leaveRequestsList" class="leave-table"></div>
+                </div>
+
+                <!-- Announcements Management -->
+                <div id="announceMgmtPage" style="display:none;">
+                    <h2>Announcements</h2>
+                    <div class="announce-form">
+                        <h3>Post New Announcement</h3>
+                        <form id="announceForm">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" id="announceTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Content</label>
+                                <textarea id="announceContent" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary">Post</button>
+                        </form>
+                    </div>
+                    <div id="adminAnnouncements" class="announcements-list"></div>
+                </div>
+
+                <!-- Recruitment Management -->
+                <div id="recruitmentPage" style="display:none;">
+                    <h2>Recruitment &amp; Hiring</h2>
+                    <div class="recruitment-grid">
+                        <div class="recruitment-panel">
+                            <h3>Create Job Opening</h3>
+                            <form id="jobPostingForm">
+                                <div class="form-group">
+                                    <label>Job Title</label>
+                                    <input type="text" id="jobTitle" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Department</label>
+                                        <input type="text" id="jobDepartment" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Location</label>
+                                        <input type="text" id="jobLocation" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Employment Type</label>
+                                    <select id="jobEmploymentType">
+                                        <option value="Full-time">Full-time</option>
+                                        <option value="Part-time">Part-time</option>
+                                        <option value="Contract">Contract</option>
+                                        <option value="Internship">Internship</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea id="jobDescription" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary">Publish Job</button>
+                            </form>
+                        </div>
+
+                        <div class="recruitment-panel">
+                            <h3>Add Candidate</h3>
+                            <form id="candidateForm">
+                                <div class="form-group">
+                                    <label>Role</label>
+                                    <select id="candidateJobId" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Applicant Name</label>
+                                    <input type="text" id="candidateName" required>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="email" id="candidateEmail" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Phone</label>
+                                        <input type="text" id="candidatePhone">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Experience</label>
+                                    <input type="text" id="candidateExperience" placeholder="Example: 3 years in operations" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Candidate Summary</label>
+                                    <textarea id="candidateSummary" rows="4" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select id="candidateStatus">
+                                        <option value="new">New</option>
+                                        <option value="screening">Screening</option>
+                                        <option value="interview">Interview</option>
+                                        <option value="offer">Offer</option>
+                                        <option value="hired">Hired</option>
+                                        <option value="rejected">Rejected</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn-primary">Save Candidate</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="jobPostingsList" class="recruitment-list"></div>
+                    <div id="candidateList" class="recruitment-table"></div>
+                </div>
+
+                <!-- Attendance QR -->
+                <div id="attendanceQrPage" style="display:none;">
+                    <h2>Attendance QR Codes</h2>
+                    <div class="recruitment-grid">
+                        <div class="recruitment-panel qr-panel">
+                            <h3>📷 Check In QR</h3>
+                            <img id="checkInQrCode" alt="Check in QR code" class="attendance-qr-image">
+                            <p>Today: <strong data-qr-date>—</strong>. Employees scan with their phone to check in.</p>
+                        </div>
+                        <div class="recruitment-panel qr-panel">
+                            <h3>📷 Check Out QR</h3>
+                            <img id="checkOutQrCode" alt="Check out QR code" class="attendance-qr-image">
+                            <p>Today: <strong data-qr-date>—</strong>. Employees scan with their phone to check out.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

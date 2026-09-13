@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manager workspace | ETIFT</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar"><div class="nav-brand"><img src="assets/etift-logo.png" alt="ETIFT logo" class="nav-logo"><span>ETIFT Manager</span></div><div class="nav-links"><span id="managerName">Manager</span><button onclick="logout()" class="btn-logout">Logout</button></div></nav>
+  <div class="dashboard-container"><aside class="sidebar"><ul class="sidebar-menu">
+    <li><a href="#overview" class="active" data-manager-page="overview">Team overview</a></li>
+    <li><a href="#attendance" data-manager-page="attendance">Attendance report</a></li>
+    <li><a href="#corrections" data-manager-page="corrections">Correction approvals</a></li>
+    <li><a href="#roster" data-manager-page="roster">Shift &amp; roster</a></li>
+    <li><a href="/dashboard.html">My employee view</a></li>
+  </ul></aside>
+  <main class="main-content">
+    <section id="managerOverview"><h2>Team overview</h2><div class="stats-grid"><div class="stat-card"><h3>Team size</h3><p id="managerTeamSize">—</p></div><div class="stat-card"><h3>Present today</h3><p id="managerPresent">—</p></div><div class="stat-card"><h3>Needs review</h3><p id="managerPending">—</p></div></div><div class="quick-actions"><h3>Today’s operating rhythm</h3><p>Standard shift: <strong>14:30 – 23:30</strong> · 1 hour break · All times are local.</p></div></section>
+    <section id="managerAttendance" style="display:none"><h2>Attendance report</h2><div id="managerAttendanceTable" class="attendance-table"></div></section>
+    <section id="managerCorrections" style="display:none"><h2>Correction approvals</h2><div id="managerCorrectionsTable" class="attendance-table"></div></section>
+    <section id="managerRoster" style="display:none"><h2>Shift &amp; roster scheduling</h2><div class="modal-form"><form id="shiftForm"><div class="form-row"><div class="form-group"><label>Employee</label><select id="shiftEmployee" required></select></div><div class="form-group"><label>Shift date</label><input type="date" id="shiftDate" required></div></div><div class="form-row"><div class="form-group"><label>Start</label><input type="time" id="shiftStart" value="14:30" required></div><div class="form-group"><label>End</label><input type="time" id="shiftEnd" value="23:30" required></div></div><div class="form-group"><label>Notes</label><input id="shiftNotes" placeholder="Rotation, flexible hours, or handover note"></div><button class="btn-primary" type="submit">Publish shift</button></form></div><div id="managerRosterTable" class="attendance-table"></div></section>
+  </main></div><script src="script.js"></script>
+</body></html>
